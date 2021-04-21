@@ -1,42 +1,53 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { getPersons, PersonInterface } from "../services/person";
+import HirePersonForm from "./HirePersonForm";
 import PersonList from "./PersonList";
 
 const App: FunctionComponent = () => {
   const [persons, setPersons] = useState<PersonInterface[]>([]);
   const [counter, setCounter] = useState(0);
 
+  const firePerson = (id: string) => {
+    setPersons((persons) => persons.filter((p) => p.id !== id));
+  };
+
+  const hirePerson = (person: PersonInterface) => {
+    // setPersons((persons) => persons.concat(person));
+    setPersons((persons) => [person].concat(persons));
+  };
+
   useEffect(() => {
-    console.log("Every time");
+    console.log("Joka ikinen kerta");
   });
 
   useEffect(() => {
-    const foo = setInterval(() => {
-      setCounter((counter) => counter + 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(foo);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("Every time persons change");
+    console.log("Joka kerta kun personit muuttuu, ja saapuu oikea yö.");
   }, [persons]);
 
   useEffect(() => {
     getPersons().then(setPersons);
 
-    console.log("Rendered only once, as no deps provided");
+    console.log("Vain kerran, kun komponentti on rendattu ekan kerran");
+  }, []);
+
+  useEffect(() => {
+    const tussi = setInterval(() => {
+      setCounter((counter) => counter + 1);
+    }, 1000);
+    return () => {
+      clearInterval(tussi);
+    };
   }, []);
 
   return (
     <main>
-      <h1>Mah ERPpis!</h1>
+      <h1>Mega ERP</h1>
 
-      <p>Render rendered {counter} times</p>
+      <p>Renderiä rendailtu {counter} kertaa.</p>
 
-      <PersonList persons={persons} />
+      <HirePersonForm hirePerson={hirePerson} />
+
+      <PersonList firePerson={firePerson} persons={persons} />
     </main>
   );
 };

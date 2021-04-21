@@ -6,6 +6,7 @@ export interface PersonInterface {
   id: string;
   firstName: string;
   lastName: string;
+  age: number;
 }
 
 export const getPersons = async (): Promise<PersonInterface[]> => {
